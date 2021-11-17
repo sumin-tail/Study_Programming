@@ -29,12 +29,12 @@ void MapDraw::DrawMidText(string str, int x, int y)
 	cout << str;
 	return;
 }
+
 void MapDraw::TextDraw(string str, int x, int y)
 {
 	gotoxy(x, y);
 	cout << str;
 }
-
 
 
 void MapDraw::BoxErase(int Width, int Height)
@@ -114,6 +114,7 @@ int MapDraw::MenuSelectCursor(int MenuLen, int AddCol, int x, int y)
 			ORIGINAL
 		}
 }
+
 MapDraw::~MapDraw()
 {
 }
