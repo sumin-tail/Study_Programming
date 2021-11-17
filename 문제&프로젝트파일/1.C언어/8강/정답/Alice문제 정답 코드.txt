@@ -1,0 +1,51 @@
+#pragma warning(disable:4996)
+#include<stdio.h>
+#include<time.h>
+#include<string.h>
+
+int KMPCheck(char buf[], char Check[], int Size)
+{
+	for (int i = 0; i <= Size / 2; i++)
+	{
+		if (buf[i] != Check[i] || buf[Size - i] != Check[Size - i])
+			return 0;
+	}
+	return 1;
+}
+
+void KMPSearch(char buf[], char Check[], int Size)
+{
+	int count = 0;
+	for (int i = 0; buf[i] != NULL; i++)
+	{
+		if (Check[0] == buf[i] && Check[Size - 1] == buf[i + Size - 1])
+		{
+			if (KMPCheck(&buf[i + 1], &Check[1], Size - 3) == 1)
+			{
+				count++;
+				i += (Size - 1);
+			}
+		}
+	}
+	printf("KMP Check %s Count : %d\n", Check, count);
+}
+void main()
+{
+	char buf[300000] = { 0 };
+	FILE* f = fopen("Alice.txt", "r");
+	if (f == NULL)
+	{
+		printf("해당 이름의 파일이 없습니다.\n");
+		return;
+	}
+	else
+	{
+		fread(buf, sizeof(buf), 1, f);
+		fclose(f);
+	}
+	printf("%s", buf);
+	char Check[256];
+	printf("Check Word Input : ");
+	scanf("%s", Check);
+	KMPSearch(buf, Check, strlen(Check));
+}
