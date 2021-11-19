@@ -2,7 +2,7 @@
 
 Character::Character()
 {
-
+	
 }
 
 Character::~Character()
@@ -10,10 +10,56 @@ Character::~Character()
 
 }
 
+//캐릭터 이름 설정
 void Character::SetName()
 {
 	YELLOW
 	m_MapDrawManager.DrawMidText("Player 이름 입력 : ", WIDTH, HEIGHT * 0.5f);
 	cin >> m_Name;
 	ORIGINAL
+}
+
+//정보출력
+void Character::Info(int x, int y)
+{
+	switch (m_Type)
+	{
+	case TYPE_PLAYER: //플레이어는 노란색으로 출력하고 몬스터는 흰색으로 출력해야 함
+		YELLOW
+		m_MapDrawManager.DrawMidText("====="+m_Name+"=====", x, y);
+		ORIGINAL
+		break;
+	case TYPE_MONSTER:
+		break;
+	}
+}
+
+void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
+{
+	switch (StartType)
+	{
+	case STARTTYPE_NEWSTART:
+		//디폴트 플레이어 파일은 공격력 생명력 레벨업까지 필요한 경험치 현재경험치 레벨 소지골드 순으로 가지고 있음
+		switch (Type)
+		{
+		case TYPE_PLAYER:
+			Load >> m_Atk;
+			Load >> m_MaxHealth;
+			Load >> m_MaxExp;
+			Load >> m_Exp;
+			Load >> m_Lv;
+			Load >> m_Gold;
+			m_Type = TYPE_PLAYER;
+			m_GetExp = m_Exp; //새로만든 캐릭터니 현재 경험치와 얻은 경험치가 0으로 같음
+			m_CurHealth = m_MaxHealth; //새로만든 캐릭터니 현재 체력과 최대체력이 같음
+			break;
+		case TYPE_MONSTER:
+			break;
+		default:
+			break;
+		}
+		break;
+	case STARTTYPE_LOADSTART:
+		break;
+	}
 }

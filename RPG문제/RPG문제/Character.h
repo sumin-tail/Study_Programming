@@ -2,6 +2,9 @@
 #include "Mecro.h"
 #include "MapDraw.h"
 
+#define UPATK 4
+#define UPHP 10
+
 //가위바위보  Rock Paper Scissors <대문자만 땀
 enum RSP 
 {
@@ -33,8 +36,6 @@ private:
 	int	 m_Gold;//소지 골드
 	TYPE m_Type; //몬스터 또는 플레이어 타입
 	MapDraw m_MapDrawManager; //드로우를 위한 함수
-protected:
-
 public:
 	//-생성/소멸자-//
 	Character();
@@ -43,10 +44,11 @@ public:
 	void Hit(); //공격 당했을 때
 	void Attack(); //공격했을 때
 	void LvUp(); //레벨업 
-	bool ExpUp(); //경험치 상승 > 상승 안세어 레벨업 체크해서 LvUp 함수실행
-
+	bool ExpUp(); //경험치 상승 > 상승 안에서 레벨업 체크해서 LvUp 함수 실행하는걸로
+	void Info(int x, int y); //정보출력
 	//설정함수//
 	void SetName();
+	void SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType);
 
 	//-반환함수-//  -> 많이 쓸것 같은건 인라인으로
 	inline string GetName()

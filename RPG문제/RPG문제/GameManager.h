@@ -4,6 +4,12 @@
 #include "MapDraw.h"
 #include "Shop.h"
 
+enum FILESTATE
+{
+	FILESTATE_SAVE,
+	FILESTATE_LOAD
+};
+
 //언제나 디파인과 enum 활용하기!! 
 //상속을 활용하기 무기- 무기종류 로 활용하면 될듯
 //변수 이름 잘 짓기
@@ -16,14 +22,25 @@ private:
 	Character* m_Monster; //몬스터
 	Shop m_Shop; //상점
 	MapDraw m_MapDrawManager; //드로우를 위한 변수
+	string m_PlayerFileName;//플레이어 파일 이름
+	string m_MonsterFileName;//몬스터 파일 이름
+	int m_MonsterCount; //몬스터 종류(갯수)
 
-	//--다른곳에서 쓰일 일이 없는 함수들--
+	//--다른곳에서 쓰일 일이 없는 함수들--//
 	void Menu(); //메뉴
 	void GameSetting(STARTTYPE type); //게임세팅 - New 인지 Load 인지 체크해서 설정
-	void PlayerSetting(); //플레이어 세팅
-	void SaveFileList(); //세이프 파일 리스트 출력
-protected:
+	void Dongeon(); //던전 메뉴 출력
+	//-파일 관련-//
+	void Save(); //파일 세이브
+	bool Load(STARTTYPE StartType); //파일 로드
+	bool FileList(FILESTATE State); //파일리스트 출력
+	//-전투-/
+	void Fight(Character* Player, Character* Monster);//플레이어와 몬스터 싸움
 public:
+	//-생성/소멸자-//
+	GameManager();
+	~GameManager();
+	//--//
 	void MainMenu(); //메인(시작) 메뉴
 };
 
