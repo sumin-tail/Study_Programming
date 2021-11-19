@@ -40,29 +40,34 @@ public:
 	Character();
 	~Character();
 
+	void Hit(); //공격 당했을 때
+	void Attack(); //공격했을 때
+	void LvUp(); //레벨업 
+	bool ExpUp(); //경험치 상승 > 상승 안세어 레벨업 체크해서 LvUp 함수실행
+
 	//설정함수//
 	void SetName();
 
 	//-반환함수-//  -> 많이 쓸것 같은건 인라인으로
-	inline int GetExp()
+	inline string GetName()
 	{
-		return m_GetExp;
+		return m_Name;
 	}
 	inline int GetAtk()
 	{
 		return m_Atk;
 	}
-	inline string GetName()
+	inline int GetExp()
 	{
-		return m_Name;
-	}
-	inline int GetGold()
-	{
-		return m_Gold;
+		return m_GetExp;
 	}
 	inline int GetHealth()
 	{
 		return m_CurHealth;
+	}
+	inline int GetGold()
+	{
+		return m_Gold;
 	}
 };
 

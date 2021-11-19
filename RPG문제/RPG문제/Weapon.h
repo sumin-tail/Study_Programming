@@ -7,12 +7,14 @@
 //무기타입
 enum WEAPON
 {
-	WEAPON_BOW,
+	WEAPON_START,
+	WEAPON_BOW =0,
 	WEAPON_DAGGER,
 	WEAPON_GUN,
 	WEAPON_SWORD,
 	WEAPON_WAND,
 	WEAPON_HAMMER,
+	WEAPON_END
 };
 
 //무기 클래스
@@ -29,9 +31,8 @@ public:
 	//-생성/소멸자//
 	Weapon();
 	virtual ~Weapon(); //소멸자 가상함수로
-
 	//
-	void PrintWeapon() //무기 정보 출력
+	void PrintWeapon(int x, int y) //무기 정보 출력
 	{
 
 	}
@@ -39,6 +40,10 @@ public:
 	inline int GetPrice() //가격 반환
 	{
 		return m_Price;
+	}
+	inline WEAPON GetType() //타입반환 - 샵에서 출력할때 써야함
+	{
+		return m_WeaponType;
 	}
 };
 
