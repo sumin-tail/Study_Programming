@@ -66,16 +66,20 @@ void GameManager::Menu()
 			//플레이어 정보
 		case 2:
 			m_MapDrawManager.BoxErase(WIDTH, HEIGHT);
-			m_Player->Info(WIDTH, HEIGHT * 0.7f);
+			m_Player->Info(WIDTH, HEIGHT * 0.5f); //플레이어 정보출력
+			_getch();
 			break;
 			//몬스터 정보
 		case 3:
+			m_MapDrawManager.BoxErase(WIDTH, HEIGHT);
+			//몬스터 정보 출력-> 이건 모든 몬스터를 출력해야함
 			break;
 			//무기 상점
 		case 4:
 			break;
 			//세이브
 		case 5:
+			FileList(FILESTATE_SAVE);
 			break;
 			//종료-> 메인화면으로 돌아감
 		case 6:
@@ -130,11 +134,11 @@ void GameManager::GameSetting(STARTTYPE type)
 //파일 로드
 bool GameManager::Load(STARTTYPE StartType)
 {
+	m_MapDrawManager.BoxErase(WIDTH, HEIGHT); //화면 지우고
 	switch (StartType)
 	{
 	case STARTTYPE_NEWSTART: //새게임
 	{
-		m_MapDrawManager.BoxErase(WIDTH, HEIGHT); //화면 지우고
 		m_Player = new Character; //새 캐릭터 동적 할당
 		m_Player->SetName();
 		m_PlayerFileName = "DefaultPlayer.txt";
@@ -149,7 +153,8 @@ bool GameManager::Load(STARTTYPE StartType)
 		break;
 	}
 	case STARTTYPE_LOADSTART: //이어하기
-
+		m_Player = new Character; //새 캐릭터 동적 할당
+		FileList(FILESTATE_LOAD); //파일리스트 엶
 		break;
 	}
 	return false;//오류용 임시 리턴
@@ -157,19 +162,54 @@ bool GameManager::Load(STARTTYPE StartType)
 
 
 //세이프 파일 리스트 출력
-//1번슬롯 : <파일여부 : O>
 bool GameManager::FileList(FILESTATE State)
 {
 	m_MapDrawManager.BoxErase(WIDTH, HEIGHT); //화면 지우고
-	//출력 예시  1번슬롯 : <파일여부 : O> 또는 X
+	m_PlayerFileName = "SavePlayer";
+	m_MonsterFileName = "SaveMonster";
+	GREEN //여기서 부터
 	for (int i = 1; i < 11; i++)
 	{
-		if (true)
+		if (FileOpenCheck(m_PlayerFileName + to_string(i)+".txt")&& FileOpenCheck(m_MonsterFileName+ to_string(i)+".txt"))
 		{
+			m_MapDrawManager.DrawMidText(to_string(i)+"번슬롯 : <파일여부 : O>", WIDTH, HEIGHT*0.1f + i * 2);
 		}
 		else
 		{
+			m_MapDrawManager.DrawMidText(to_string(i) + "번슬롯 : <파일여부 : X>", WIDTH, HEIGHT * 0.1f + i*2);
 		}
 	}
-	return true;//오류용 임시 리턴
+	m_MapDrawManager.DrawMidText("11.돌아가기              ", WIDTH, HEIGHT * 0.1f + 22);
+	ORIGINAL //여기까진 세이브 파일 리스트 출력 
+	int select = m_MapDrawManager.MenuSelectCursor(11, 2, 7, HEIGHT * 0.1f+2);
+
+	switch (State)
+	{
+	case FILESTATE_SAVE:
+	{
+		//파일 세이브 시켜주고 - 플레이어랑 몬스터랑 둘다 시켜야 함- 리턴
+		ofstream save;
+		save.open(m_PlayerFileName+ to_string(select) + ".txt");
+		m_Player->FileSave(save);
+		return true;//리턴
+	}
+	case FILESTATE_LOAD:
+		//해당이름 파일을 열어서  로드 후 리턴
+
+		break;
+	}
+}
+
+//해당 파일이 있는지(열리는지)확인
+bool GameManager::FileOpenCheck(string filename)
+{
+	ifstream load;
+	load.open(filename);
+	if (load.is_open())
+	{
+		load.close(); //닫아주고 돌아감
+		return true;
+	}
+	load.close(); 
+	return false;
 }

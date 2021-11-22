@@ -46,6 +46,8 @@ public:
 	void LvUp(); //레벨업 
 	bool ExpUp(); //경험치 상승 > 상승 안에서 레벨업 체크해서 LvUp 함수 실행하는걸로
 	void Info(int x, int y); //정보출력
+	void FileSave(ofstream& Save); //세이브
+
 	//설정함수//
 	void SetName();
 	void SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType);

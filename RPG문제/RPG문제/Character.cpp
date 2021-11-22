@@ -26,14 +26,19 @@ void Character::Info(int x, int y)
 	{
 	case TYPE_PLAYER: //플레이어는 노란색으로 출력하고 몬스터는 흰색으로 출력해야 함
 		YELLOW
-		m_MapDrawManager.DrawMidText("====="+m_Name+"=====", x, y);
+		m_MapDrawManager.DrawMidText("====="+m_Name+"("+ to_string(m_Lv)+"Lv)=====", x, y);
+		m_MapDrawManager.DrawMidText("공격력 = "+ to_string(m_Atk) +"	생명력 = "+ to_string(m_CurHealth)+"/" +to_string(m_MaxHealth), x, y+1);
+		m_MapDrawManager.DrawMidText("경험치 = "+ to_string(m_Exp) +"/"+ to_string(m_MaxExp)+"	 GetEXP : "+ to_string(m_GetExp), x, y+2);
+		m_MapDrawManager.DrawMidText("Gold = "+ to_string(m_Gold), x, y+3);
 		ORIGINAL
 		break;
 	case TYPE_MONSTER:
+
 		break;
 	}
 }
 
+//플레이어 정보 설정
 void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
 {
 	switch (StartType)
@@ -60,6 +65,28 @@ void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
 		}
 		break;
 	case STARTTYPE_LOADSTART:
+		break;
+	}
+}
+
+//파일 세이브
+void Character::FileSave(ofstream& Save)
+{
+	switch (m_Type)
+	{
+	case TYPE_PLAYER:
+		Save << m_Name << " ";
+		Save << m_Atk << " ";
+		Save << m_MaxHealth << " ";
+		Save << m_MaxExp << " ";
+		Save << m_GetExp << " ";
+		Save << m_Lv << " ";
+		Save << m_Gold << " ";
+		Save << m_Exp << " ";
+		Save << m_CurHealth << endl;
+		break;
+	case TYPE_MONSTER:
+
 		break;
 	}
 }

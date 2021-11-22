@@ -31,9 +31,9 @@ private:
 	void GameSetting(STARTTYPE type); //게임세팅 - New 인지 Load 인지 체크해서 설정
 	void Dongeon(); //던전 메뉴 출력
 	//-파일 관련-//
-	void Save(); //파일 세이브
 	bool Load(STARTTYPE StartType); //파일 로드
 	bool FileList(FILESTATE State); //파일리스트 출력
+	bool FileOpenCheck(string filename); //해당 파일이 있는지 (열리는지)확인
 	//-전투-/
 	void Fight(Character* Player, Character* Monster);//플레이어와 몬스터 싸움
 public:
