@@ -19,7 +19,7 @@ void Character::SetName()
 	ORIGINAL
 }
 
-//정보출력
+//정보출력9플레이어/몬스터)
 void Character::Info(int x, int y)
 {
 	switch (m_Type)
@@ -33,7 +33,10 @@ void Character::Info(int x, int y)
 		ORIGINAL
 		break;
 	case TYPE_MONSTER:
-
+		m_MapDrawManager.DrawMidText("=====" + m_Name + "(" + to_string(m_Lv) + "Lv)=====", x, y);
+		m_MapDrawManager.DrawMidText("공격력 = " + to_string(m_Atk) + "	생명력 = " + to_string(m_CurHealth) + "/" + to_string(m_MaxHealth), x, y + 1);
+		m_MapDrawManager.DrawMidText("경험치 = " + to_string(m_Exp) + "/" + to_string(m_MaxExp) + "	 GetEXP : " + to_string(m_GetExp), x, y + 2);
+		m_MapDrawManager.DrawMidText("Gold = " + to_string(m_Gold), x, y + 3);
 		break;
 	}
 }
@@ -43,8 +46,7 @@ void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
 {
 	switch (StartType)
 	{
-	case STARTTYPE_NEWSTART:
-		//디폴트 플레이어 파일은 공격력 생명력 레벨업까지 필요한 경험치 현재경험치 레벨 소지골드 순으로 가지고 있음
+	case STARTTYPE_NEWSTART: //새로하기
 		switch (Type)
 		{
 		case TYPE_PLAYER:
@@ -59,12 +61,41 @@ void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
 			m_CurHealth = m_MaxHealth; //새로만든 캐릭터니 현재 체력과 최대체력이 같음
 			break;
 		case TYPE_MONSTER:
+			Load >> m_Name; //몬스터는 이름이 정해져있음
+			Load >> m_Atk;
+			Load >> m_MaxHealth;
+			Load >> m_MaxExp;
+			Load >> m_Exp;
+			Load >> m_Lv;
+			Load >> m_Gold;
+			m_Type = TYPE_MONSTER;
+			m_GetExp = m_Exp; 
+			m_CurHealth = m_MaxHealth; 
 			break;
 		default:
 			break;
 		}
 		break;
-	case STARTTYPE_LOADSTART:
+	case STARTTYPE_LOADSTART: //이어하기
+		switch (Type)
+		{
+		case TYPE_PLAYER:
+			Load >> m_Name; //오픈된 파일에서 정보들 가져옴
+			Load >> m_Atk;
+			Load >> m_MaxHealth;
+			Load >> m_MaxExp;
+			Load >> m_GetExp;
+			Load >> m_Lv;
+			Load >> m_Gold;
+			Load >> m_Exp;;
+			Load >> m_CurHealth;
+			//다음줄은 무기
+			break;
+		case TYPE_MONSTER:
+			break;
+		default:
+			break;
+		}
 		break;
 	}
 }
@@ -84,9 +115,18 @@ void Character::FileSave(ofstream& Save)
 		Save << m_Gold << " ";
 		Save << m_Exp << " ";
 		Save << m_CurHealth << endl;
+		//무기있으면 추가로 무기데이터도 저장
 		break;
 	case TYPE_MONSTER:
-
+		Save << m_Name << " ";
+		Save << m_Atk << " ";
+		Save << m_MaxHealth << " ";
+		Save << m_MaxExp << " ";
+		Save << m_GetExp << " ";
+		Save << m_Lv << " ";
+		Save << m_Gold << " ";
+		Save << m_Exp << " ";
+		Save << m_CurHealth << endl;
 		break;
 	}
 }

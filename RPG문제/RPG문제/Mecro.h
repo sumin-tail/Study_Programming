@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include <list>
 #include<Windows.h>
 #include<conio.h>
 #include<string>

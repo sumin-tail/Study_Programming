@@ -1,6 +1,7 @@
 #pragma once
 #include "Mecro.h"
 #include "MapDraw.h"
+#include "Weapon.h"
 
 #define UPATK 4
 #define UPHP 10
@@ -36,6 +37,7 @@ private:
 	int	 m_Gold;//소지 골드
 	TYPE m_Type; //몬스터 또는 플레이어 타입
 	MapDraw m_MapDrawManager; //드로우를 위한 함수
+	Weapon* m_Weapon; //무기를 담을 변수
 public:
 	//-생성/소멸자-//
 	Character();
@@ -44,6 +46,8 @@ public:
 	void Hit(); //공격 당했을 때
 	void Attack(); //공격했을 때
 	void LvUp(); //레벨업 
+	void ResetExp(); //경험치 초기화
+	void ResetHealth();
 	bool ExpUp(); //경험치 상승 > 상승 안에서 레벨업 체크해서 LvUp 함수 실행하는걸로
 	void Info(int x, int y); //정보출력
 	void FileSave(ofstream& Save); //세이브
