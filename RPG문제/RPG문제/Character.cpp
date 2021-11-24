@@ -65,11 +65,11 @@ void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
 			Load >> m_Atk;
 			Load >> m_MaxHealth;
 			Load >> m_MaxExp;
-			Load >> m_Exp;
+			Load >> m_GetExp;
 			Load >> m_Lv;
 			Load >> m_Gold;
+			m_Exp = 0;
 			m_Type = TYPE_MONSTER;
-			m_GetExp = m_Exp; 
 			m_CurHealth = m_MaxHealth; 
 			break;
 		default:
@@ -89,9 +89,20 @@ void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
 			Load >> m_Gold;
 			Load >> m_Exp;;
 			Load >> m_CurHealth;
+			m_Type = TYPE_PLAYER;
 			//다음줄은 무기
 			break;
 		case TYPE_MONSTER:
+			Load >> m_Name; //오픈된 파일에서 정보들 가져옴
+			Load >> m_Atk;
+			Load >> m_MaxHealth;
+			Load >> m_MaxExp;
+			Load >> m_GetExp;
+			Load >> m_Lv;
+			Load >> m_Gold;
+			Load >> m_Exp;;
+			Load >> m_CurHealth;
+			m_Type = TYPE_MONSTER;
 			break;
 		default:
 			break;
@@ -129,4 +140,50 @@ void Character::FileSave(ofstream& Save)
 		Save << m_CurHealth << endl;
 		break;
 	}
+}
+
+//공격 당했을 때
+void Character::Hit(int Damage)
+{
+	m_CurHealth -= Damage; //현재체력에서 데미지 만큼 깎음
+	if (m_CurHealth < 0)
+	{
+		m_CurHealth = 0;
+	}
+}
+
+
+//공격했을 때
+void Character::Attack()
+{
+
+}
+
+//레벨업 
+void Character::LvUp()
+{
+
+}
+
+//경험치 초기화
+void Character::ResetExp()
+{
+
+}
+
+//현재체력 초기화
+void Character::ResetHealth()
+{
+
+}
+
+//경험치 상승 > 상승 안에서 레벨업 체크해서 LvUp 함수 실행하는걸로
+bool Character::ExpUp()
+{
+	return  true;
+}
+
+RSP Character::GetRSP()
+{
+	return  (RSP)(rand() % 3);
 }

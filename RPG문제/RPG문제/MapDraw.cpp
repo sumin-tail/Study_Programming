@@ -36,6 +36,16 @@ void MapDraw::TextDraw(string str, int x, int y)
 	cout << str;
 }
 
+void MapDraw::DrowBattleLine(int Width, int Height)
+{
+	BLOOD
+		gotoxy(2, Height);
+		for (int x = 1; x < Width - 1; x++)
+			cout << "--";
+	DrawMidText("vs", Width, Height);
+	ORIGINAL
+	return;
+}
 
 void MapDraw::BoxErase(int Width, int Height)
 {
