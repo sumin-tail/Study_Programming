@@ -25,17 +25,17 @@ private:
 	WEAPON m_WeaponType; //무기타입
 	string m_Name; //무기이름
 	int m_Atk; //공격력
-protected:
-
+	MapDraw m_MapDrawManager;
 public:
 	//-생성/소멸자//
 	Weapon();
 	virtual ~Weapon(); //소멸자 가상함수로
 	//
-	void PrintWeapon(int x, int y) //무기 정보 출력
-	{
 
-	}
+	void Info(int x, int y);//무기정보 출력
+	void ShowShopInfo(int x, int y);//상점에서 정보출력
+	void Save(ofstream& Save);//무기 정보 세이브
+
 	//-반환 함수-//
 	inline int GetPrice() //가격 반환
 	{

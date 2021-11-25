@@ -3,8 +3,8 @@
 #include "MapDraw.h"
 #include "Weapon.h"
 
-#define UPATK 4
-#define UPHP 10
+#define UPATTACKSTAT 4
+#define UPHEALTHSTAT 10
 
 //가위바위보  Rock Paper Scissors <대문자만 땀
 enum RSP 
@@ -44,11 +44,10 @@ public:
 	~Character();
 
 	void Hit(int Damage); //공격 당했을 때
-	void Attack(); //공격했을 때
 	void LvUp(); //레벨업 
 	void ResetExp(); //경험치 초기화
 	void ResetHealth(); //현재체력 초기화(풀로)
-	bool ExpUp(); //경험치 상승 > 상승 안에서 레벨업 체크해서 LvUp 함수 실행하는걸로
+	void ExpUp(int exp); //경험치 상승 > 상승 안에서 레벨업 체크해서 LvUp 함수 실행하는걸로
 	void Info(int x, int y); //정보출력
 	void FileSave(ofstream& Save); //세이브
 	RSP GetRSP(); //가위바위보 랜덤값 반환

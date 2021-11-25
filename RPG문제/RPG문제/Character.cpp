@@ -146,41 +146,55 @@ void Character::FileSave(ofstream& Save)
 void Character::Hit(int Damage)
 {
 	m_CurHealth -= Damage; //현재체력에서 데미지 만큼 깎음
-	if (m_CurHealth < 0)
+	if (m_CurHealth < 0) //현재체력이 0 이하로 떨어지면 0으로 만들어줌
 	{
 		m_CurHealth = 0;
 	}
 }
 
 
-//공격했을 때
-void Character::Attack()
-{
-
-}
-
 //레벨업 
 void Character::LvUp()
 {
-
+	PUPPLE
+	m_MapDrawManager.BoxErase(WIDTH, HEIGHT);
+	m_MapDrawManager.DrawMidText(m_Name + "레벨업!!", WIDTH, HEIGHT * 0.4f);
+	//스텟상승
+	int Num;
+	Num = rand() % UPATTACKSTAT + 1;
+	m_Atk += Num;
+	m_MapDrawManager.DrawMidText("공격력 "+to_string(Num) + " 증가!!", WIDTH, HEIGHT * 0.5f);
+	Num = rand() % UPHEALTHSTAT + 1;
+	m_MaxHealth += Num;
+	m_MapDrawManager.DrawMidText("생명력 " + to_string(Num) + " 증가!!", WIDTH, HEIGHT * 0.6f);
+	m_MaxExp += m_MaxExp * 0.3;
+	//
+	ResetHealth(); //현재 체력을 풀로 
+	ResetExp(); //경험치를 리셋
+	ORIGINAL
+	_getch();
 }
 
 //경험치 초기화
 void Character::ResetExp()
 {
-
+	m_Exp = 0;
 }
 
 //현재체력 초기화
 void Character::ResetHealth()
 {
-
+	m_CurHealth = m_MaxHealth;
 }
 
 //경험치 상승 > 상승 안에서 레벨업 체크해서 LvUp 함수 실행하는걸로
-bool Character::ExpUp()
+void Character::ExpUp(int exp)
 {
-	return  true;
+	m_Exp += exp;
+	if (m_Exp >= m_MaxExp)
+	{
+		LvUp();
+	}
 }
 
 RSP Character::GetRSP()

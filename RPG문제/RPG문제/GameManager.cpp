@@ -22,7 +22,6 @@ GameManager::~GameManager()
 //메인(시작) 메뉴
 void GameManager::MainMenu()
 {
-	int select;
 	while (true)
 	{
 		m_MapDrawManager.BoxDraw(WIDTH, HEIGHT); //상자 그리기
@@ -32,7 +31,7 @@ void GameManager::MainMenu()
 		m_MapDrawManager.DrawMidText("Load Game", WIDTH, HEIGHT * 0.6f);
 		m_MapDrawManager.DrawMidText("Game Exit", WIDTH, HEIGHT * 0.7f);
 
-		select = m_MapDrawManager.MenuSelectCursor(3, 3, 10, HEIGHT * 0.5f);
+		int select = m_MapDrawManager.MenuSelectCursor(3, 3, 10, HEIGHT * 0.5f);
 		switch (select)
 		{
 			//새 게임
@@ -55,7 +54,7 @@ void GameManager::MainMenu()
 //메뉴
 void GameManager::Menu()
 {
-	while (true)
+	while (m_Player->GetHealth() != 0)
 	{
 		m_MapDrawManager.BoxErase(WIDTH, HEIGHT);
 		m_MapDrawManager.DrawMidText("☆★ Menu ★☆", WIDTH, HEIGHT * 0.3f);
@@ -91,6 +90,7 @@ void GameManager::Menu()
 			break;
 			//무기 상점
 		case 4:
+			m_Shop.ShopMenu(m_Player);
 			break;
 			//세이브
 		case 5:
@@ -100,6 +100,17 @@ void GameManager::Menu()
 		case 6:
 			return;
 		}
+	}
+
+	if (NULL != m_Player) //예외처리> 플레이어가 NULL을 가리키고있지 않을 때
+	{
+		delete m_Player;
+		m_Player = NULL;
+	}
+	if (NULL != m_Monster)
+	{
+		delete[] m_Monster;
+		m_Monster = NULL;
 	}
 }
 
@@ -146,24 +157,25 @@ void GameManager::GameSetting(STARTTYPE type)
 
 //전투
 void GameManager::Fight(Character* Player, Character* Monster)
-{	
-	while (true)
+{
+	string RSPText[3] = { "바위" ,"보", "가위" };
+	int playerRSP = NULL;
+	int monsterRSP;
+
+	m_MapDrawManager.BoxDraw(WIDTH, HEIGHT); //상자 그리기
+	m_MapDrawManager.DrowBattleLine(WIDTH, HEIGHT * 0.5f); // 배틀 선 만들기
+	YELLOW
+		m_MapDrawManager.DrawMidText("가위 : 1   바위 : 2   보 : 3", WIDTH, HEIGHT * 0.3f);
+	ORIGINAL
+	Player->Info(WIDTH, HEIGHT * 0.1f); //플레이어 정보 드로우
+	Monster->Info(WIDTH, HEIGHT * 0.8f); //몬스터 정보 드로우
+
+	while (Player->GetHealth() !=0 && Monster->GetHealth() !=0)//플레이어와 몬스터의 체력이 둘다 0 이 아닐때
 	{
-
-		m_MapDrawManager.BoxDraw(WIDTH, HEIGHT); //상자 그리기
-		m_MapDrawManager.DrowBattleLine(WIDTH, HEIGHT * 0.5f); // 배틀 선 만들기
-		YELLOW
-			m_MapDrawManager.DrawMidText("가위 : 1   바위 : 2   보 : 3", WIDTH, HEIGHT * 0.3f);
-		ORIGINAL
-		Player->Info(WIDTH, HEIGHT * 0.1f); //플레이어 정보 드로우
-		Monster->Info(WIDTH, HEIGHT * 0.8f); //몬스터 정보 드로우
-
+		playerRSP = 10;
 		//전투가 끝난후 몬스터의 정보는 바뀌면 안됨 > 현제 체력 같은 것
-		//그럼 그냥 전투가 끝나면 닳은 몬스터의 체력을 풀로 채워주면 되는게 아닌가
-
-		//전투시 키입력 > 1,2,3 이 들어올경우 배틀 시작/ 플레이어의 값과 몬스터의 값을 비교해서  승  패 비김 결정 (출력) 
-		//비겼을 경우 아무일도 일어나지 않지만 이기거나 졌을경우는 상대방의 공격력만큼 체력이 감소
-		while (true)
+		//그럼 그냥 전투가 끝나면 닳은 몬스터의 체력을 풀로 채워주면 되는게 아닌가?
+		while (playerRSP == 10)
 		{
 			if (_kbhit())//키보드 입력이 들어왔을경우
 			{
@@ -171,38 +183,82 @@ void GameManager::Fight(Character* Player, Character* Monster)
 				switch (select)
 				{
 				case '1':
+					playerRSP = RSP_SCISSORS;
+					break;
 				case '2':
+					playerRSP = RSP_ROCK;
+					break;
 				case '3':
-				{
-					int playerRSP = select - 49;
-					int monsterRSP = Monster->GetRSP();
-
-					if (playerRSP == monsterRSP) //둘이 같을경우에는 비김
-					{
-						m_MapDrawManager.DrawMidText("Draw", WIDTH, HEIGHT * 0.4f);
-					}
-					//몬스터가 가위가 아니고 플레이어의 값이 몬스터보다 크거나 / 몬스커가 가위지만 플레이어가 바위일 경우 플레이어 승리
-					else if ((monsterRSP != RSP_SCISSORS && playerRSP > monsterRSP) || (monsterRSP == RSP_SCISSORS && playerRSP == RSP_ROCK))
-					{
-						YELLOW
-							m_MapDrawManager.DrawMidText("Win", WIDTH, HEIGHT * 0.4f);
-						ORIGINAL
-					}
-					else //이외의 경우는 플레이어 패배
-					{
-						YELLOW
-							m_MapDrawManager.DrawMidText("Lose", WIDTH, HEIGHT * 0.7f);
-						ORIGINAL
-					}
-				}
+					playerRSP = RSP_PAPER;
 				break;
-				default://1,2,3 이 아닌경우에는 다시
+				default:
 					break;
 				}
 			}
 		}
+		m_MapDrawManager.BoxDraw(WIDTH, HEIGHT); //상자 그리기
+		m_MapDrawManager.DrowBattleLine(WIDTH, HEIGHT * 0.5f); // 배틀 선 만들기
+		YELLOW
+			m_MapDrawManager.DrawMidText("가위 : 1   바위 : 2   보 : 3", WIDTH, HEIGHT * 0.3f);
+		monsterRSP = Monster->GetRSP();
+		m_MapDrawManager.DrawMidText(RSPText[playerRSP], WIDTH, HEIGHT * 0.4f);
+		ORIGINAL
+		m_MapDrawManager.DrawMidText(RSPText[monsterRSP], WIDTH, HEIGHT * 0.6f+1);
 
+		auto result = playerRSP - monsterRSP;
 
+		// 바위 0 보 1 가위 2   
+		//플레이어 승리 조건
+		//바위/가위 -2  보/바위 1  가위/보 1
+		// 몬스터승리조건
+		//바위/가위 2   보/바위 -1   가위/보 -1
+
+		//판정존
+		RED //승패 출력용
+			if (result == 0) //둘이 같을경우에는 비김
+			{
+				m_MapDrawManager.DrawMidText("Draw", WIDTH, HEIGHT * 0.4f + 1);
+				m_MapDrawManager.DrawMidText("Draw", WIDTH, HEIGHT * 0.6f);
+			}
+		//몬스터가 가위가 아니고 플레이어의 값이 몬스터보다 크거나 / 몬스커가 가위지만 플레이어가 바위일 경우 플레이어 승리
+			else if (result == -2 || result == 1)
+			{
+				m_MapDrawManager.DrawMidText("Win", WIDTH, HEIGHT * 0.4f + 1);
+				m_MapDrawManager.DrawMidText("Lose", WIDTH, HEIGHT * 0.6f);
+				Monster->Hit(Player->GetAtk());
+			}
+			else //이외의 경우는 플레이어 패배
+			{
+				m_MapDrawManager.DrawMidText("Lose", WIDTH, HEIGHT * 0.4f + 1);
+				m_MapDrawManager.DrawMidText("Win", WIDTH, HEIGHT * 0.6f);
+				Player->Hit(Monster->GetAtk());
+			}
+		ORIGINAL
+		Player->Info(WIDTH, HEIGHT * 0.1f); //플레이어 정보 드로우
+		Monster->Info(WIDTH, HEIGHT * 0.8f); //몬스터 정보 드로우
+	}
+
+	if (Monster->GetHealth() == 0) //플레이어 승리
+	{
+		m_MapDrawManager.BoxErase(WIDTH, HEIGHT);
+		RED
+		m_MapDrawManager.DrawMidText(Player->GetName()+" 승리!!", WIDTH, HEIGHT * 0.3f);
+		m_MapDrawManager.DrawMidText(Player->GetName()+ "가 경험치"+ to_string(Monster->GetExp())+"를 얻었습니다.", WIDTH, HEIGHT * 0.4f);
+		ORIGINAL
+
+		_getch();
+		Player->ExpUp(Monster->GetExp());
+		Monster->ResetHealth();//몬스터 체력 원상 복귀
+	}
+	else //몬스터 승리
+	{
+		m_MapDrawManager.BoxErase(WIDTH, HEIGHT);
+		RED
+		m_MapDrawManager.DrawMidText(Monster->GetName() + " 승리!!", WIDTH, HEIGHT * 0.3f);
+		m_MapDrawManager.DrawMidText(Monster->GetName() + "가 경험치" + to_string(Player->GetExp()) + "를 얻었습니다.", WIDTH, HEIGHT * 0.4f);
+		_getch();
+		m_MapDrawManager.DrawMidText("Game Over", WIDTH, HEIGHT * 0.5f);
+		ORIGINAL
 	}
 }
 
