@@ -10,8 +10,8 @@ class Shop
 {
 private:
 	MapDraw m_MapDrawManager; //드로우 용
-	Weapon m_pWeaponList; //무기리스트
-	int m_iWeaponCount; //무기 갯수
+	map<string, list<Weapon*>> m_WeaponList; //무기리스트
+	int m_WeaponCount; //무기 갯수
 public:
 	int GetWeaponCount();
 	void ShopMenu(Character* Player);

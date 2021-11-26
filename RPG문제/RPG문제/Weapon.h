@@ -20,7 +20,7 @@ enum WEAPON
 //무기 클래스
 class Weapon
 {
-private:
+protected:
 	int m_Price; //가격
 	WEAPON m_WeaponType; //무기타입
 	string m_Name; //무기이름
@@ -28,9 +28,8 @@ private:
 	MapDraw m_MapDrawManager;
 public:
 	//-생성/소멸자//
-	Weapon();
-	virtual ~Weapon(); //소멸자 가상함수로
-	//
+	Weapon() {};
+	virtual ~Weapon() {}; //소멸자 가상함수로
 
 	void Info(int x, int y);//무기정보 출력
 	void ShowShopInfo(int x, int y);//상점에서 정보출력
@@ -52,7 +51,8 @@ class Bow : public Weapon
 {
 
 public:
-	Bow();
+	Bow() { m_WeaponType = WEAPON_BOW; }
+	Bow(string Name, int Damage, int Gold);
 	~Bow();
 };
 
@@ -61,7 +61,8 @@ class Dagger : public Weapon
 {
 
 public:
-	Dagger();
+	Dagger() { m_WeaponType = WEAPON_DAGGER; }
+	Dagger(string Name, int Damage, int Gold);
 	~Dagger();
 };
 
@@ -70,7 +71,8 @@ class Gun : public Weapon
 {
 
 public:
-	Gun();
+	Gun() { m_WeaponType = WEAPON_GUN; }
+	Gun(string Name, int Damage, int Gold);
 	~Gun();
 };
 
@@ -79,7 +81,8 @@ class Sword : public Weapon
 {
 
 public:
-	Sword();
+	Sword() { m_WeaponType = WEAPON_SWORD; }
+	Sword(string Name, int Damage, int Gold);
 	~Sword();
 };
 
@@ -88,7 +91,8 @@ class Wand : public Weapon
 {
 
 public:
-	Wand();
+	Wand() { m_WeaponType = WEAPON_WAND; }
+	Wand(string Name, int Damage, int Gold);
 	~Wand();
 };
 
@@ -97,7 +101,8 @@ class Hammer : public Weapon
 {
 
 public:
-	Hammer();
+	Hammer() { m_WeaponType = WEAPON_HAMMER; }
+	Hammer(string Name, int Damage, int Gold);
 	~Hammer();
 };
 
