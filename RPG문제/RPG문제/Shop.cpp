@@ -37,11 +37,17 @@ void Shop::ShopMenu(Character* Player)
 
 void Shop::WeaponMenu(Character* Player, WEAPON Type)
 {
+	m_MapDrawManager.BoxErase(WIDTH, HEIGHT);
 	m_MapDrawManager.DrawMidText("보유 Gold : "+ to_string(Player->GetGold()), WIDTH, HEIGHT * 0.1f-1);
 	m_MapDrawManager.DrawMidText("Shop", WIDTH, HEIGHT * 0.1f+1);
+	int i = 0;
 	switch (Type)
 	{
-	case WEAPON_BOW:
+	case WEAPON_BOW: 
+		for (list<Weapon*>::iterator iter = m_WeaponList.find("Bow")->second.begin(); iter != m_WeaponList.find("Bow")->second.end(); iter++,i++)
+		{
+			(*iter)->ShowShopInfo(WIDTH, HEIGHT * 0.2f+i*3);
+		}
 		break;
 	case WEAPON_DAGGER:
 		break;
@@ -56,6 +62,10 @@ void Shop::WeaponMenu(Character* Player, WEAPON Type)
 	default:
 		break;
 	}
+	_getch();
+	//m_MapDrawManager.DrawMidText("이전페이지", x, y);
+	//m_MapDrawManager.DrawMidText("다음페이지", x, y);
+	//m_MapDrawManager.DrawMidText("나가기", x, y);
 
 }
 

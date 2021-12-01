@@ -11,9 +11,10 @@ void Weapon::Info(int x, int y)
 //상점에서 정보출력
 void Weapon::ShowShopInfo(int x, int y)
 {
-	m_MapDrawManager.DrawMidText("이전페이지", x, y);
-	m_MapDrawManager.DrawMidText("다음페이지", x, y);
-	m_MapDrawManager.DrawMidText("나가기", x, y);
+	YELLOW
+		m_MapDrawManager.DrawMidText("가격 : " +to_string(m_Price) + " 무기타입 : ", x, y);
+		m_MapDrawManager.DrawMidText("무기이름 : " + m_Name + "공격력 : " + to_string(m_Atk), x, y + 1);
+	ORIGINAL
 }
 
 void Weapon::Save(ofstream& Save)
