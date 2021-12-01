@@ -2,8 +2,6 @@
 
 int Shop::GetWeaponCount()
 {
-
-
 	return 0;
 }
 
@@ -37,41 +35,81 @@ void Shop::ShopMenu(Character* Player)
 
 void Shop::WeaponMenu(Character* Player, WEAPON Type)
 {
-	m_MapDrawManager.BoxErase(WIDTH, HEIGHT);
-	m_MapDrawManager.DrawMidText("보유 Gold : "+ to_string(Player->GetGold()), WIDTH, HEIGHT * 0.1f-1);
-	m_MapDrawManager.DrawMidText("Shop", WIDTH, HEIGHT * 0.1f+1);
+	int page = 0;
+	vector<Weapon*> weaponList;
 	int i = 0;
-	switch (Type)
+
+	while (true)
 	{
-	case WEAPON_BOW: 
-		for (list<Weapon*>::iterator iter = m_WeaponList.find("Bow")->second.begin(); iter != m_WeaponList.find("Bow")->second.end(); iter++,i++)
+		m_MapDrawManager.BoxErase(WIDTH, HEIGHT);
+		m_MapDrawManager.DrawMidText("보유 Gold : " + to_string(Player->GetGold()), WIDTH, HEIGHT * 0.1f - 1);
+		string type = GetTypeString(Type);
+		if (type == "")
 		{
-			(*iter)->ShowShopInfo(WIDTH, HEIGHT * 0.2f+i*3);
+			return;
 		}
-		break;
-	case WEAPON_DAGGER:
-		break;
-	case WEAPON_GUN:
-		break;
-	case WEAPON_SWORD:
-		break;
-	case WEAPON_WAND:
-		break;
-	case WEAPON_HAMMER:
-		break;
-	default:
-		break;
+
+		m_MapDrawManager.DrawMidText(type+" Shop", WIDTH, HEIGHT * 0.1f + 1);
+		weaponList = m_WeaponList[type];
+		int count = (page + 1) * 5;
+		int length = weaponList.size();
+		length = (length > count) ? count : length;
+
+		int print =0; //페이지 넘어갔을때 1번칸부터 출력하기위해서  i를 그대로 쓰면 화면밖으로 튀어나감
+		for (i = page * 5; i < length; i++, print++)
+		{
+			weaponList[i]->ShowShopInfo(WIDTH, HEIGHT *(0.2f + print *0.1f)); 
+		}
+		int maxLen = print + 3;
+		float printheight = (0.2f + print * 0.1f);
+		m_MapDrawManager.DrawMidText("이전페이지", WIDTH, HEIGHT * printheight);
+		m_MapDrawManager.DrawMidText("다음페이지", WIDTH, HEIGHT * printheight + 3);
+		m_MapDrawManager.DrawMidText("나가기", WIDTH, HEIGHT * printheight + 6);
+
+		int select = m_MapDrawManager.MenuSelectCursor(maxLen, 3, 5, HEIGHT*0.2f);
+		if (select == maxLen)
+		{//ㄴㅏ가기
+			return;
+		}
+		else if(select == maxLen-1 && page < (weaponList.size() / 5))
+		{//다음페이지
+			page += 1;
+		}
+		else if (select == maxLen - 2 && page > 0)
+		{//이전페이지
+			page -= 1;
+		}
+		else
+		{//무기사기
+			if (Player->GetGold() >= weaponList[select-1]->GetPrice())
+			{
+				Player->WeaponGet(weaponList[select-1]);
+			}
+		}
+		
 	}
-	_getch();
-	//m_MapDrawManager.DrawMidText("이전페이지", x, y);
-	//m_MapDrawManager.DrawMidText("다음페이지", x, y);
-	//m_MapDrawManager.DrawMidText("나가기", x, y);
 
 }
 
 string Shop::GetTypeString(WEAPON Type)
 {
-	return string();
+	switch (Type)
+	{
+	case WEAPON_BOW:
+		return "Bow";
+	case WEAPON_DAGGER:
+		return "Dagger";
+	case WEAPON_GUN:
+		return "Gun";
+	case WEAPON_SWORD:
+		return "Sword";
+	case WEAPON_WAND:
+		return "Wand";
+	case WEAPON_HAMMER:
+		return "Hammer";
+	}
+
+	return "";
 }
 
 Shop::Shop() //생성될때 무기 리스트를 받아와야

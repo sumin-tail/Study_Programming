@@ -54,6 +54,7 @@ public:
 
 	//설정함수//
 	void SetName();
+	void WeaponGet(Weapon* weapon);
 	void SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType);
 
 	//-반환함수-//  -> 많이 쓸것 같은건 인라인으로

@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include <list>
+#include<vector>
 #include <map>
 #include<Windows.h>
 #include<conio.h>

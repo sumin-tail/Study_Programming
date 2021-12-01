@@ -10,7 +10,7 @@ class Shop
 {
 private:
 	MapDraw m_MapDrawManager; //드로우 용
-	map<string, list<Weapon*>> m_WeaponList; //무기리스트
+	map<string, vector<Weapon*>> m_WeaponList; //무기리스트
 	int m_WeaponCount; //무기 갯수
 public:
 	int GetWeaponCount();

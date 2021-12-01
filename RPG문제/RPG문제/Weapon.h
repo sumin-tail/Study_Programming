@@ -40,10 +40,7 @@ public:
 	{
 		return m_Price;
 	}
-	inline WEAPON GetType() //타입반환 - 샵에서 출력할때 써야함
-	{
-		return m_WeaponType;
-	}
+	string GetTypeString(WEAPON Type);
 };
 
 //활 클래스

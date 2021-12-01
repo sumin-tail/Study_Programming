@@ -4,7 +4,7 @@
 void Weapon::Info(int x, int y)
 {
 	YELLOW
-	m_MapDrawManager.DrawMidText(" 무기타입 : @@ 무기이름 : " + m_Name + "공격력 : " + to_string(m_Atk), x, y);
+	m_MapDrawManager.DrawMidText(" 무기타입 : " + GetTypeString(m_WeaponType)+" 무기이름 : " + m_Name + " 공격력 : " + to_string(m_Atk), x, y);
 	ORIGINAL
 }
 
@@ -12,13 +12,38 @@ void Weapon::Info(int x, int y)
 void Weapon::ShowShopInfo(int x, int y)
 {
 	YELLOW
-		m_MapDrawManager.DrawMidText("가격 : " +to_string(m_Price) + " 무기타입 : ", x, y);
-		m_MapDrawManager.DrawMidText("무기이름 : " + m_Name + "공격력 : " + to_string(m_Atk), x, y + 1);
+		m_MapDrawManager.DrawMidText("가격 : " +to_string(m_Price) + " 무기타입 : "+ GetTypeString(m_WeaponType), x, y);
+		m_MapDrawManager.DrawMidText("무기이름 : " + m_Name + " 공격력 : " + to_string(m_Atk), x, y + 1);
 	ORIGINAL
 }
 
 void Weapon::Save(ofstream& Save)
 {
+	Save << GetTypeString(m_WeaponType) << " ";
+	Save << m_Name << " ";
+	Save << m_Atk << " ";
+	Save << m_Price << " ";
+}
+
+string Weapon::GetTypeString(WEAPON Type)
+{
+	switch (Type)
+	{
+	case WEAPON_BOW:
+		return "Bow";
+	case WEAPON_DAGGER:
+		return "Dagger";
+	case WEAPON_GUN:
+		return "Gun";
+	case WEAPON_SWORD:
+		return "Sword";
+	case WEAPON_WAND:
+		return "Wand";
+	case WEAPON_HAMMER:
+		return "Hammer";
+	}
+
+	return "";
 }
 
 Bow::Bow(string Name, int Damage, int Gold)
