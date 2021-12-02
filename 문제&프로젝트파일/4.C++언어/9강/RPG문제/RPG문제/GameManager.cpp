@@ -36,12 +36,18 @@ void GameManager::MainMenu()
 		{
 			//새 게임
 		case 1:
-			GameSetting(STARTTYPE_NEWSTART); 
+			if (Load(STARTTYPE_NEWSTART) == false)
+			{
+				break;
+			}
 			Menu();
 			break;
 			//이어하기
 		case 2:
-			GameSetting(STARTTYPE_LOADSTART);
+			if (Load(STARTTYPE_LOADSTART) == false)
+			{
+				break;
+			}
 			Menu();
 			break;
 			//게임 종료
@@ -138,20 +144,6 @@ void GameManager::Dongeon()
 		break;
 	case 7:
 		return;
-	}
-}
-
-//게임 플레이어 세팅
-void GameManager::GameSetting(STARTTYPE type)
-{
-	switch (type)
-	{
-	case STARTTYPE_NEWSTART: //새게임
-		Load(STARTTYPE_NEWSTART);
-		break;
-	case STARTTYPE_LOADSTART: //이어하기
-		Load(STARTTYPE_LOADSTART);
-		break;
 	}
 }
 
@@ -265,6 +257,16 @@ void GameManager::Fight(Character* Player, Character* Monster)
 //파일 로드
 bool GameManager::Load(STARTTYPE StartType)
 {
+	if (m_Player != NULL)
+	{
+		delete m_Player;
+	}
+
+	if (m_Monster != NULL)
+	{
+		delete [] m_Monster;
+	}
+
 	m_MapDrawManager.BoxErase(WIDTH, HEIGHT); //화면 지우고
 	switch (StartType)
 	{
@@ -295,14 +297,12 @@ bool GameManager::Load(STARTTYPE StartType)
 		{
 			m_Monster[i].SetInfo(load, TYPE_MONSTER, StartType); //몬스터 넣어줌
 		}
-		break;
+		return true;
 	}
 	case STARTTYPE_LOADSTART: //이어하기
-		FileList(FILESTATE_LOAD); //파일리스트 엶
-		return true;
+		return FileList(FILESTATE_LOAD); //파일리스트 엶
 		break;
 	}
-	return false;//오류용 임시 리턴
 }
 
 //세이프 파일 리스트 출력
@@ -326,6 +326,11 @@ bool GameManager::FileList(FILESTATE State)
 	m_MapDrawManager.DrawMidText("11.돌아가기              ", WIDTH, HEIGHT * 0.1f + 22);
 	ORIGINAL //여기까진 세이브 파일 리스트 출력 
 	int select = m_MapDrawManager.MenuSelectCursor(11, 2, 7, HEIGHT * 0.1f+2);
+
+	if (select == 11)
+	{
+		return false;
+	}
 
 	m_PlayerFileName += to_string(select) + ".txt"; //선택한 파일명으로 바꿈
 	m_MonsterFileName += to_string(select) + ".txt";

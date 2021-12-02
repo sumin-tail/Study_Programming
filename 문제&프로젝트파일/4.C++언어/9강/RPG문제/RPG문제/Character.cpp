@@ -1,6 +1,6 @@
 #include "Character.h"
 
-Character::Character()
+Character::Character() : m_Weapon(NULL)
 {
 	
 }
@@ -17,8 +17,30 @@ Character::~Character()
 void Character::SetName()
 {
 	YELLOW
+	char check;
 	m_MapDrawManager.DrawMidText("Player 이름 입력 : ", WIDTH, HEIGHT * 0.5f);
-	cin >> m_Name;
+	while (true)
+	{
+		if (_kbhit()) 
+		{ // 키보드가 눌렸는치 체크
+			check = _getch(); // 눌린 값 대입
+			if (check == '\r')
+			{
+				if (m_Name.empty())
+				{
+					m_MapDrawManager.DrawMidText("Player 이름 입력 : ", WIDTH, HEIGHT * 0.5f);
+					continue;
+				}
+
+				break;
+			}
+			else
+			{
+				m_Name += check;
+				cout << check;
+			}
+		}
+	}
 	ORIGINAL
 }
 
@@ -75,7 +97,6 @@ void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
 			m_Type = TYPE_PLAYER;
 			m_GetExp = m_Exp; //새로만든 캐릭터니 현재 경험치와 얻은 경험치가 0으로 같음
 			m_CurHealth = m_MaxHealth; //새로만든 캐릭터니 현재 체력과 최대체력이 같음
-			m_Weapon = NULL;
 			break;
 		case TYPE_MONSTER:
 			Load >> m_Name; //몬스터는 이름이 정해져있음
@@ -105,9 +126,50 @@ void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
 		switch (Type)
 		{
 		case TYPE_PLAYER:
+		{
 			m_Type = TYPE_PLAYER;
 			//다음줄은 무기
+			int check;
+			Load >> check;
+			if (check != 0)
+			{
+				string type;
+				string name;
+				int atk;
+				int price;
 
+				Load >> type;
+				Load >> name;
+				Load >> atk;
+				Load >> price;
+
+				if (type == "Bow")
+				{
+					m_Weapon = new Bow(name, atk, price); //Weapon*로 업 캐스팅
+				}
+				else if (type == "Dagger")
+				{
+					m_Weapon = new Dagger(name, atk, price);
+				}
+				else if (type == "Gun")
+				{
+					m_Weapon = new Gun(name, atk, price);
+				}
+				else if (type == "Sword")
+				{
+					m_Weapon = new Sword(name, atk, price);
+				}
+				else if (type == "Wand")
+				{
+					m_Weapon = new Wand(name, atk, price);
+				}
+				else if (type == "Hammer")
+				{
+					m_Weapon = new Hammer(name, atk, price);
+				}
+
+			}
+		}
 			break;
 		case TYPE_MONSTER:
 			m_Type = TYPE_MONSTER;

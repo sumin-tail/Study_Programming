@@ -64,6 +64,10 @@ public:
 	}
 	inline int GetAtk()
 	{
+		if (m_Weapon != NULL)
+		{
+			return m_Atk + m_Weapon->GetWeaponAtk();
+		}
 		return m_Atk;
 	}
 	inline int GetExp()

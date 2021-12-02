@@ -40,6 +40,10 @@ public:
 	{
 		return m_Price;
 	}
+	inline int GetWeaponAtk()
+	{
+		return m_Atk;
+	}
 	string GetTypeString(WEAPON Type);
 };
 

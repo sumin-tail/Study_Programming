@@ -28,7 +28,6 @@ private:
 
 	//--다른곳에서 쓰일 일이 없는 함수들--//
 	void Menu(); //메뉴
-	void GameSetting(STARTTYPE type); //게임세팅 - New 인지 Load 인지 체크해서 설정
 	void Dongeon(); //던전 메뉴 출력
 	//-파일 관련-//
 	bool Load(STARTTYPE StartType); //파일 로드

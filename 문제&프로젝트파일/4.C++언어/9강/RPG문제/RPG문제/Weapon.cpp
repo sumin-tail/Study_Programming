@@ -22,7 +22,7 @@ void Weapon::Save(ofstream& Save)
 	Save << GetTypeString(m_WeaponType) << " ";
 	Save << m_Name << " ";
 	Save << m_Atk << " ";
-	Save << m_Price << " ";
+	Save << m_Price;
 }
 
 string Weapon::GetTypeString(WEAPON Type)
