@@ -9,31 +9,31 @@ private:
     int x, y;
 
 public:
-    Point(int x_, int y_) {
-        x = x_;
-        y = y_;
+    Point(int a, int b) {
+        x = a;
+        y = b;
     }
 
     void print() {
         cout << "x = " << x << ", y = " << y << endl;
     }
 
-    Point operator / (Point tmp);
+    Point operator/ (Point tmp);
 };
 
-Point Point::operator / (Point tmp) {
+Point Point::operator/ (Point tmp) {
 
     if (x < tmp.x)
-        x = tmp.x / x;
+        tmp.x = tmp.x / x;
     else
-        x = x / tmp.x;
+        tmp.x = x / tmp.x;
 
     if (y < tmp.y)
-        y = tmp.y /y;
+        tmp.y = tmp.y /y;
     else
-        y = y / tmp.y;
+        tmp.y = y / tmp.y;
 
-    return *this;
+    return tmp;
 }
 
 
@@ -46,4 +46,5 @@ void main()
     A = A / B;
     cout << "°´Ã¼ / °´Ã¼" << endl;
     A.print();
+    B.print();
 }
