@@ -41,6 +41,7 @@ void Character::SetName()
 			}
 		}
 	}
+	//원래는 그냥 cin >>m_name 으로 처리했음
 	ORIGINAL
 }
 
@@ -81,7 +82,6 @@ void Character::Info(int x, int y)
 //플레이어 정보 설정
 void Character::SetInfo(ifstream& Load, TYPE Type, STARTTYPE StartType)
 {
-
 	switch (StartType)
 	{
 	case STARTTYPE_NEWSTART: //새로하기
