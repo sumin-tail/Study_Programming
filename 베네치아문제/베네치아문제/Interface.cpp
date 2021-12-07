@@ -79,6 +79,38 @@ void Interface::BoxDraw(int Width, int Height)
 		return;
 }
 
+void Interface::BoxDrawPos(int Width, int Height, int startY)
+{
+	BLUE
+		for (int y = 0; y < Height; y++) //y는 0 이고 세로보다 작다
+		{
+			gotoxy(WIDTH - Width, startY + y); //그릴 좌표로 이동
+			if (y == 0) //맨 첫번째줄일경우 ┌─────┐ < 의 형태여야함
+			{
+				cout << "┌";
+				for (int x = 1; x < Width - 1; x++)
+					cout << "─";
+				cout << "┐";
+			}
+			else if (y == Height - 1) //맨 마지막 줄일경우
+			{
+				cout << "└";
+				for (int x = 1; x < Width - 1; x++)
+					cout << "─";
+				cout << "┘";
+			}
+			else //둘다 아닐경우
+			{
+				cout << "│";
+				for (int x = 1; x < Width - 1; x++)
+					cout << "  ";
+				cout << "│";
+			}
+		}
+	ORIGINAL
+		return;
+}
+
 int Interface::MenuSelectCursor(int MenuLen, int AddCol, int x, int y)
 {
 	int Select = 1;

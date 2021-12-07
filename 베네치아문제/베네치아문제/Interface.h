@@ -13,6 +13,7 @@ class Interface
 {
 public:
 	void BoxDraw(int Width, int Height);
+	void BoxDrawPos(int Width, int Height ,int startY);
 	void BoxErase(int Width, int Height);
 	void DrawPoint(string str, int x, int y);
 	void DrawMidText(string str, int x, int y);

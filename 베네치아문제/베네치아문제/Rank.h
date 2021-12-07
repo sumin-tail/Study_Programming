@@ -6,6 +6,6 @@ class Rank
 private:
 
 public:
-
+	void RankSort();
 };
 
