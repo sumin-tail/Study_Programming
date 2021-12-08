@@ -11,6 +11,7 @@ private:
 	int m_y;
 	string m_word;
 public:
+	Word(string word);
 	void draw();
 	void drop();
 };

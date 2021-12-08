@@ -30,6 +30,8 @@ void Play::MainMenu()
 		{
 		case 1: //게임시작
 			Intro();
+			NameSetting();
+			GamePlay();
 			break;
 		case 2: //랭킹
 			break;
@@ -52,6 +54,14 @@ void Play::PlayerDraw()
 	ORIGINAL
 }
 
+void Play::DrawAll()
+{
+	system("cls");
+	m_DrawInterface.BoxDraw(WIDTH, HEIGHT);//큰박스
+	m_DrawInterface.BoxDrawPos(WIDTH * 0.3f, 5, HEIGHT * 0.7f);//작은 박스
+	PlayerDraw();
+}
+
 void Play::Intro()
 {
 	system("cls");
@@ -67,9 +77,9 @@ void Play::Intro()
 	m_DrawInterface.BoxDraw(WIDTH, HEIGHT);
 	m_DrawInterface.BoxDrawPos(WIDTH * 0.3f, 5, HEIGHT * 0.7f);
 	PlayerDraw();
+
 	BLUE
 	m_DrawInterface.DrawMidText("Skip : s", WIDTH, HEIGHT * 0.7f + 2);
-
 	//스토리 출력하는 곳
 	int storySize;//배경스토리 줄이 몇줄인지
 	load >> storySize;
@@ -79,32 +89,131 @@ void Play::Intro()
 		getline(load, str[i]);
 	}
 	
-	while (true)
-	{
+	int startClock = clock(); // 시작 시간 저장
 
-	}
-
-	for (int i = 0; i <= storySize - 10; i++)
+	int startNum = 0;//시작 줄 정보
+	int line = 1;
+	while (startNum < storySize - 10) //마지막 줄까지 갔을경우 끝남
 	{
-		for (int count = 0; count < 10; count++)
+		if (_kbhit())//키 입력이 들어오고
 		{
-			m_DrawInterface.DrawMidText("                                       ",WIDTH, HEIGHT * 0.3f + count); //이전 문장 지우는거
-			m_DrawInterface.DrawMidText(str[i+count], WIDTH, HEIGHT * 0.3f + count);
-			if (i == 0)
+			if (_getch() == 's') //그게 s 라면 
 			{
-				Sleep(500);//임시슬립
+				return;//돌아가기-스킵
 			}
 		}
-		Sleep(500);//임시슬립
-	}
-	_getch();
 
-	if (_kbhit())//키 입력이 들어오고
-	{
-		if (_getch() == 's') //그게 s 라면 
+		if (clock() - startClock >= SPEED*0.5f)//만약 글이 나올 시간이 되었다면
 		{
-			return;//돌아가기-스킵
+			for (int i = startNum; i < (line + startNum); i++)
+			{
+				int y = (i - startNum);
+				m_DrawInterface.DrawMidText("                                       ", WIDTH, HEIGHT * 0.3f + y); //이전 문장 지우는거
+				m_DrawInterface.DrawMidText(str[i], WIDTH, HEIGHT * 0.3f + y);
+			}
+			
+			if (10 > line) line++;
+			else startNum++;
+
+			//if (startNum == 0) //0에서 9번째 줄까지는 한칸씩 내려가햐함
+			//{
+			//	m_DrawInterface.DrawMidText(str[startNum + count], WIDTH, HEIGHT * 0.3f + count);
+			//	count++;
+			//}
+			//else
+			//{
+			//	for (count = 0; count < 10; count++)
+			//	{
+			//		m_DrawInterface.DrawMidText("                                       ", WIDTH, HEIGHT * 0.3f + count); //이전 문장 지우는거
+			//		m_DrawInterface.DrawMidText(str[startNum + count], WIDTH, HEIGHT * 0.3f + count);
+			//	}
+			//}
+			//
+			//if (count == 10)//10개의 줄을 출력했다면
+			//{
+			//	startNum++;//시작 줄 번호에 +1
+			//}
+			startClock = clock(); //시간갱신
 		}
+
 	}
 	ORIGINAL
+}
+
+void Play::NameSetting()
+{
+	DrawAll();
+	BLUE
+	m_DrawInterface.DrawMidText("이름 입력", WIDTH, HEIGHT * 0.7f - 3);
+	m_name = "";
+	while (!Typing(10, m_name));
+	ORIGINAL
+}
+
+bool Play::Typing(int textsize, string& text)
+{
+	if (_kbhit())
+	{
+		char c = _getch();
+		switch (c)
+		{
+		case '\b': //백 스페이스
+			if (text.length() > 0)
+			{
+				text = text.substr(0, text.length() - 1);
+				m_DrawInterface.DrawMidText("              ", WIDTH, HEIGHT * 0.7f - 2); //초과 경고부분 지우기
+				m_DrawInterface.DrawMidText("              ", WIDTH, HEIGHT * 0.7f + 2); //이름부분 지우기
+			}
+			break;
+		case '\r': //엔터
+			if (text.length() > 0)
+			{
+				return true;
+			}
+			break;
+		default:
+			if (text.length() >= textsize)
+			{
+				m_DrawInterface.DrawMidText(to_string(textsize) + "글자 초과!!", WIDTH, HEIGHT * 0.7f - 2);
+			}
+			else
+			{
+				text += c;
+			}
+			break;
+		}
+		m_DrawInterface.DrawMidText(text, WIDTH, HEIGHT * 0.7f + 2);
+	}
+	return false;
+}
+
+void Play::GamePlay()
+{
+	int stage = 1;
+	m_DrawInterface.BoxDraw(WIDTH, HEIGHT);
+	BLUE
+	StagePrint(stage);//스테이지 출력
+	DrawAll();
+
+	m_Playtime = clock();
+	while (m_life > 0)//플레이어 라이프가 0보다 클때 돌아감
+	{
+		Update();
+	}
+
+}
+
+void Play::StagePrint(int stage)
+{
+	int time = clock();
+	m_DrawInterface.DrawMidText("★ " + to_string(stage) + " Stage ★", WIDTH, HEIGHT * 0.3f);
+	while (clock() - time < SPEED);
+	m_DrawInterface.BoxErase(WIDTH, HEIGHT);//박스 지우기
+}
+
+void Play::Update()
+{
+	//단어 한칸씩 내리기 = 속도는 스피드 - 현재 점수
+	//플레이어가 단어를 맞췄다면 점수 올리기
+
 }
