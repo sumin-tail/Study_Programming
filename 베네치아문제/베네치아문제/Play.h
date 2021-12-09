@@ -15,7 +15,8 @@ private:
 	int m_life; //플레이어 라이프
 	Interface m_DrawInterface;//맵 드로우
 	WordManager m_WordList; //화면에 있는 단어관리용
-	int m_Playtime;
+	int m_Drawtime;
+	int m_MakeTime;
 public:
 	Play();
 	~Play();

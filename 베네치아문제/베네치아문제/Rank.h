@@ -7,5 +7,6 @@ private:
 
 public:
 	void RankSort();
+	void RankPrint();
 };
 

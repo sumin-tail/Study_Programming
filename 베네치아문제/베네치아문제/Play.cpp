@@ -191,14 +191,31 @@ void Play::GamePlay()
 {
 	int stage = 1;
 	m_DrawInterface.BoxDraw(WIDTH, HEIGHT);
-	BLUE
 	StagePrint(stage);//스테이지 출력
 	DrawAll();
 
-	m_Playtime = clock();
+	m_Drawtime = clock();
+	m_MakeTime = clock();
+	string ancer;
 	while (m_life > 0)//플레이어 라이프가 0보다 클때 돌아감
 	{
 		Update();
+		if (Typing(20, ancer))
+		{
+			if (m_WordList.WordCheck(ancer))
+			{
+				ancer = "";
+				m_DrawInterface.DrawMidText("              ", WIDTH, HEIGHT * 0.7f + 2); 
+				m_score += 10;
+				PlayerDraw();
+			}
+			else
+			{
+				ancer = "";
+				RED
+				m_DrawInterface.DrawMidText("Failed Compare!!!", WIDTH, HEIGHT * 0.7f + 2);
+			}
+		}
 	}
 
 }
@@ -206,6 +223,7 @@ void Play::GamePlay()
 void Play::StagePrint(int stage)
 {
 	int time = clock();
+	BLUE
 	m_DrawInterface.DrawMidText("★ " + to_string(stage) + " Stage ★", WIDTH, HEIGHT * 0.3f);
 	while (clock() - time < SPEED);
 	m_DrawInterface.BoxErase(WIDTH, HEIGHT);//박스 지우기
@@ -213,7 +231,16 @@ void Play::StagePrint(int stage)
 
 void Play::Update()
 {
-	//단어 한칸씩 내리기 = 속도는 스피드 - 현재 점수
-	//플레이어가 단어를 맞췄다면 점수 올리기
+	if (clock() - m_Drawtime > SPEED - m_score) //시간이되면 하락
+	{
+		m_WordList.DropWord();
+		m_Drawtime = clock();
+	}
+
+	if (clock() - m_MakeTime > SPEED*2 - m_score) //단어 생성
+	{
+		m_WordList.WordCreat();
+		m_MakeTime = clock();
+	}
 
 }

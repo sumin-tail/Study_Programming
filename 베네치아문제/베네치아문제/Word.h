@@ -14,5 +14,8 @@ public:
 	Word(string word);
 	void draw();
 	void drop();
+	void XPosset(int x);
+	bool Live();
+	bool Die(string text);
 };
 
