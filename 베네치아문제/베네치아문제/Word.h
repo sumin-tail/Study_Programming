@@ -2,7 +2,7 @@
 #include "Mecro.h"
 #include "Interface.h"
 
-//단어 Class , 필요 맴버 변수 x,y,string 필요 맴버함수 draw drop Live Die
+//단어 Class
 class Word
 {
 private:
@@ -11,11 +11,11 @@ private:
 	int m_y;
 	string m_word;
 public:
-	Word(string word);
+	Word(string word, int x);
+	Word();
 	void draw();
 	void drop();
-	void XPosset(int x);
-	bool Live();
 	bool Die(string text);
+	string WordGet();
 };
 

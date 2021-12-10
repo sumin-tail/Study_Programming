@@ -6,54 +6,48 @@ WordManager::WordManager()
 	string str;
 	load.open("Word.txt");
 	load >> m_WordCount;
+	m_WordList = new string[m_WordCount];
+	int count = 0;
 	while (!load.eof())
 	{
 		load >> str;
-		m_WordList.push_back(new Word(str));
+		m_WordList[count++] = str;
 	}
-
 }
 
 WordManager::~WordManager()
 {
-	while (!m_WordList.empty())
+	delete[] m_WordList;
+	for(auto& word : m_DropList)//전체 탐색
 	{
-		delete [] &m_WordList;
+		delete word;
 	}
 }
 
-void WordManager::WordCreat()
+void WordManager::WordCreat() //단어 생성
 {
-	int num = rand() % m_WordCount;
-	int num2 = rand() % (WIDTH*2) + 1;
-	while (m_WordList[num]->Live())
-	{
-		num = rand() % m_WordCount;
-	}
-	m_WordList[num]->XPosset(num2);
-	m_WordList[num]->drop();
+	int num = rand() % m_WordCount;//단어 선택
+	int x = rand() % WIDTHFULL + 2;
+	m_DropList.push_back(new Word(m_WordList[num], x));//화면에 살아있는 단어리스트에 추가
 }
 
-void WordManager::DropWord()
+void WordManager::DropWord() //단어 드롭
 {
-	for (int i = 0; i < m_WordCount; i++)
+	for (auto& word : m_DropList)
 	{
-		if (m_WordList[i]->Live())
-		{
-			m_WordList[i]->drop();
-		}
+		word->drop();
+		word->draw();
 	}
 }
 
-bool WordManager::WordCheck(string text)
+bool WordManager::WordCheck(string text) //플레이어가 친 단어가 화면에 존재하는지
 {
-	for (int i = 0; i < m_WordCount; i++)
+	for (auto& word : m_DropList)
 	{
-		if (m_WordList[i]->Live()&&m_WordList[i]->Die(text))
+		if (word->WordGet() == text)
 		{
 			return true;
 		}
 	}
-
 	return false;
 }

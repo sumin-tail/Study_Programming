@@ -2,12 +2,13 @@
 //매크로 파일
 
 #include<iostream>
-#include<vector> //단어 벡터에 넣을것 >리스트에 배해 접근이 용이
+#include<vector> //단어 벡터에 넣을것 > 리스트에 배해 접근이 용이
 #include<Windows.h>
 #include <conio.h>
 #include<string>
 #include<fstream>
 #include<time.h>
+#include<list>
 using namespace std;
 
 //색상 존
@@ -31,4 +32,6 @@ using namespace std;
 //////////////////////////////////////////////////////
 
 #define WIDTH 65
+#define WIDTHFULL 130
 #define HEIGHT 30
+//#define SPECIALCHAR 2 //특수문자

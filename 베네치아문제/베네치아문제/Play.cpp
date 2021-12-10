@@ -34,6 +34,7 @@ void Play::MainMenu()
 			GamePlay();
 			break;
 		case 2: //·©Å·
+			m_Rank.RankPrint();
 			break;
 		case 3:
 			return;
