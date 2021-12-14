@@ -12,8 +12,9 @@ private:
 public:
 	WordManager();
 	~WordManager();
+	void WordClear();
 	void WordCreat();
-	void DropWord();
+	bool DropWord();
 	bool WordCheck(string text);
 };
 

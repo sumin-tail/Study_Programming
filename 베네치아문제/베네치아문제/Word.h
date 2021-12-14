@@ -10,12 +10,13 @@ private:
 	int m_x;
 	int m_y;
 	string m_word;
+	bool hide;
 public:
 	Word(string word, int x);
 	Word();
 	void draw();
-	void drop();
-	bool Die(string text);
+	bool drop();
+	void Die();
 	string WordGet();
 };
 

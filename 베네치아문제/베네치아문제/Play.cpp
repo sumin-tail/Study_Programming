@@ -45,6 +45,7 @@ void Play::MainMenu()
 void Play::PlayerDraw()
 {
 	RED
+	m_DrawInterface.TextDraw("                                   ", 0, HEIGHT + 2);
 	m_DrawInterface.TextDraw(" Life : ", 0, HEIGHT + 2);
 	for (int i = 0; i < m_life; i++)
 	{
@@ -201,6 +202,14 @@ void Play::GamePlay()
 	while (m_life > 0)//플레이어 라이프가 0보다 클때 돌아감
 	{
 		Update();
+		if (m_score/100 >= stage)
+		{
+			stage++;
+			StagePrint(stage);//스테이지 출력
+			m_DrawInterface.BoxDraw(WIDTH, HEIGHT);
+			DrawAll();
+			m_WordList.WordClear();
+		}
 		if (Typing(20, ancer))
 		{
 			if (m_WordList.WordCheck(ancer))
@@ -212,13 +221,21 @@ void Play::GamePlay()
 			}
 			else
 			{
+				int time = clock();
 				ancer = "";
 				RED
 				m_DrawInterface.DrawMidText("Failed Compare!!!", WIDTH, HEIGHT * 0.7f + 2);
+				while (clock() - time < SPEED);
+				m_DrawInterface.DrawMidText("                 ", WIDTH, HEIGHT * 0.7f + 2);
 			}
 		}
 	}
 
+	int time = clock();
+	RED
+	m_DrawInterface.DrawMidText("★ GameOver ★", WIDTH, HEIGHT * 0.3f);
+	while (clock() - time < SPEED);
+	Reset();
 }
 
 void Play::StagePrint(int stage)
@@ -232,9 +249,13 @@ void Play::StagePrint(int stage)
 
 void Play::Update()
 {
-	if (clock() - m_Drawtime > SPEED - m_score) //시간이되면 하락
+	if (clock() - m_Drawtime > 500 - m_score) //시간이되면 하락
 	{
-		m_WordList.DropWord();
+		if (m_WordList.DropWord())//끝에 닿은 단어가 있을경우
+		{
+			m_life--;
+			PlayerDraw();
+		}
 		m_Drawtime = clock();
 	}
 
@@ -243,5 +264,11 @@ void Play::Update()
 		m_WordList.WordCreat();
 		m_MakeTime = clock();
 	}
+}
 
+void Play::Reset()
+{
+	m_name = "? ? ?";
+	m_score = 0;
+	m_life = 10;
 }

@@ -31,5 +31,6 @@ public:
 	void GamePlay();
 	void StagePrint(int stage);
 	void Update();
+	void Reset();
 };
 
