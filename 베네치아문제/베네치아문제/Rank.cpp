@@ -1,6 +1,7 @@
 #include "Rank.h"
 
-void Rank::RankSort()
+//랭킹 정렬
+void Rank::RankSort(string name, int score, int stage)
 {
 	//새롭게 점수가 등록 되었을 때
 	ifstream load;
@@ -9,12 +10,9 @@ void Rank::RankSort()
 	{
 		return;
 	}
-	string name;
-	int score;
-	int stage;
-
+	
 	vector<RankPlayer*> list;
-
+	list.push_back(new RankPlayer(name, score, stage));
 	while (!load.eof())
 	{
 		load >> name;
@@ -22,8 +20,39 @@ void Rank::RankSort()
 		load >> stage;
 		list.push_back(new RankPlayer(name, score, stage));
 	}
-
+	//랭킹 정렬
+	for (int i = 0; i < list.size()-1; i++)
+	{
+		for (int j = i + 1; j < list.size(); j++)
+		{
+			if (list[i]->score < list[j]->score)
+			{
+				RankPlayer* temp = list[i];
+				list[i] = list[j];
+				list[j] = temp;
+			}
+		}
+	}
 	load.close();
+
+	//세이브
+	ofstream save;
+	save.open("Rank.txt");
+	if (save.is_open())
+	{
+		int i = 0;
+		for (; i < list.size()-1; i++)
+		{
+			save << list[i]->name << " " << list[i]->score << " " << list[i]->stage << endl;
+		}
+		save << list[i]->name << " " << list[i]->score << " " << list[i]->stage; //마지막 랭킹은 엔터 없이
+	}
+	save.close();
+
+	for (auto& RankPlayer : list)//전체 탐색
+	{
+		delete RankPlayer;
+	}
 }
 
 //랭킹 출력
@@ -42,7 +71,6 @@ void Rank::RankPrint()
 	m_DrawInterface.TextDraw("Name", WIDTH * 0.5f, HEIGHT * 0.3f);
 	m_DrawInterface.TextDraw("Score", WIDTH * 1.0f, HEIGHT * 0.3f);
 	m_DrawInterface.TextDraw("Stage", WIDTH * 1.5f, HEIGHT * 0.3f);
-	//m_DrawInterface.DrawMidText("Name          Score          Stage", WIDTH, HEIGHT * 0.3f);//박스 안에 드로우
 
 	ifstream load;
 	load.open("Rank.txt");
@@ -65,7 +93,7 @@ void Rank::RankPrint()
 		m_DrawInterface.TextDraw(to_string(score), WIDTH * 1.0f, HEIGHT * 0.3f+ count*2);
 		m_DrawInterface.TextDraw(to_string(stage), WIDTH * 1.5f, HEIGHT * 0.3f+ count*2);
 		count++;
-		if (HEIGHT * 0.3f + count * 2 >= HEIGHT-1)
+		if (HEIGHT * 0.3f + count * 2 >= HEIGHT-1) //일정 순위까지 출력하고 브레이크
 		{
 			break;
 		}

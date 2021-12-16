@@ -22,7 +22,7 @@ class Rank
 private:
 	Interface m_DrawInterface;//µå·Î¿ì
 public:
-	void RankSort();
+	void RankSort(string name, int score, int stage);
 	void RankPrint();
 };
 

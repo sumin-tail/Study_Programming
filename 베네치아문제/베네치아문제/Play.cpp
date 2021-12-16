@@ -17,13 +17,13 @@ void Play::MainMenu()
 {
 	while (true)
 	{
+		m_DrawInterface.BoxErase(WIDTH, HEIGHT);
 		m_DrawInterface.BoxDraw(WIDTH, HEIGHT);
 		BLUE
 		m_DrawInterface.DrawMidText("☆ ★ 베 네 치 아 ★ ☆", WIDTH, HEIGHT * 0.2f);
 		m_DrawInterface.DrawMidText("1.Game Start", WIDTH, HEIGHT * 0.4f);
 		m_DrawInterface.DrawMidText("2.Rank", WIDTH, HEIGHT * 0.4f + 3);
 		m_DrawInterface.DrawMidText("3.Exit", WIDTH, HEIGHT * 0.4f + 6);
-		ORIGINAL
 		PlayerDraw();
 		int select = m_DrawInterface.MenuSelectCursor(3, 3, 25, HEIGHT * 0.4f);
 		switch (select)
@@ -154,6 +154,7 @@ void Play::NameSetting()
 
 bool Play::Typing(int textsize, string& text)
 {
+	BLUE
 	if (_kbhit())
 	{
 		char c = _getch();
@@ -231,6 +232,8 @@ void Play::GamePlay()
 		}
 	}
 
+	m_Rank.RankSort(m_name, m_score, stage);
+
 	int time = clock();
 	RED
 	m_DrawInterface.DrawMidText("★ GameOver ★", WIDTH, HEIGHT * 0.3f);
@@ -249,7 +252,7 @@ void Play::StagePrint(int stage)
 
 void Play::Update()
 {
-	if (clock() - m_Drawtime > 500 - m_score) //시간이되면 하락
+	if (clock() - m_Drawtime > SPEED - m_score + m_WordList.GetSpeed()) //시간이되면 하락
 	{
 		if (m_WordList.DropWord())//끝에 닿은 단어가 있을경우
 		{
@@ -259,7 +262,7 @@ void Play::Update()
 		m_Drawtime = clock();
 	}
 
-	if (clock() - m_MakeTime > SPEED*2 - m_score) //단어 생성
+	if (clock() - m_MakeTime > SPEED*2 - m_score + m_WordList.GetSpeed()) //단어 생성
 	{
 		m_WordList.WordCreat();
 		m_MakeTime = clock();

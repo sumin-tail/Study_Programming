@@ -1,11 +1,4 @@
-asd 3 1419
-asd 2 1155
-asd 2 1089
-jj 1 0
-uu 1 0
-tailbeast 1 0
-tail 1 0
-asd 1 0
-tail 1 0
-d 1 0
-ewqtg 1 0
+tail 250 3
+d 160 2
+e 80 1
+f 0 1
