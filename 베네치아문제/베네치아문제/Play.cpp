@@ -17,6 +17,7 @@ void Play::MainMenu()
 {
 	while (true)
 	{
+		system("cls");
 		m_DrawInterface.BoxErase(WIDTH, HEIGHT);
 		m_DrawInterface.BoxDraw(WIDTH, HEIGHT);
 		BLUE
@@ -215,6 +216,7 @@ void Play::GamePlay()
 		{
 			if (m_WordList.WordCheck(ancer))
 			{
+			
 				ancer = "";
 				m_DrawInterface.DrawMidText("              ", WIDTH, HEIGHT * 0.7f + 2); 
 				m_score += 10;
@@ -222,11 +224,11 @@ void Play::GamePlay()
 			}
 			else
 			{
-				int time = clock();
+				int failtime = clock();
 				ancer = "";
 				RED
 				m_DrawInterface.DrawMidText("Failed Compare!!!", WIDTH, HEIGHT * 0.7f + 2);
-				while (clock() - time < SPEED);
+				while (clock()- failtime < SPEED) {}
 				m_DrawInterface.DrawMidText("                 ", WIDTH, HEIGHT * 0.7f + 2);
 			}
 		}
@@ -267,6 +269,8 @@ void Play::Update()
 		m_WordList.WordCreat();
 		m_MakeTime = clock();
 	}
+
+	m_WordList.ItemCheck();
 }
 
 void Play::Reset()

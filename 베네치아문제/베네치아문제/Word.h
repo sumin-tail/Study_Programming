@@ -25,8 +25,8 @@ private:
 public:
 	Word(string word, int x, bool item);
 	Word();
-	void draw();
-	bool drop();
+	void draw(bool mosaic);
+	bool drop(bool mosaic);
 	void Die();
 	string WordGet();
 	ITEMTYPE ItemWord();

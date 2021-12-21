@@ -1,4 +1,5 @@
 #include "Rank.h"
+#include <algorithm>
 
 //랭킹 정렬
 void Rank::RankSort(string name, int score, int stage)
@@ -20,6 +21,9 @@ void Rank::RankSort(string name, int score, int stage)
 		load >> stage;
 		list.push_back(new RankPlayer(name, score, stage));
 	}
+	load.close();
+
+	//std::sort(list.begin(), list.end(), 조건식);
 	//랭킹 정렬
 	for (int i = 0; i < list.size()-1; i++)
 	{
@@ -33,7 +37,6 @@ void Rank::RankSort(string name, int score, int stage)
 			}
 		}
 	}
-	load.close();
 
 	//세이브
 	ofstream save;
@@ -93,6 +96,7 @@ void Rank::RankPrint()
 		m_DrawInterface.TextDraw(to_string(score), WIDTH * 1.0f, HEIGHT * 0.3f+ count*2);
 		m_DrawInterface.TextDraw(to_string(stage), WIDTH * 1.5f, HEIGHT * 0.3f+ count*2);
 		count++;
+		// 개수 조건으로 수정.
 		if (HEIGHT * 0.3f + count * 2 >= HEIGHT-1) //일정 순위까지 출력하고 브레이크
 		{
 			break;

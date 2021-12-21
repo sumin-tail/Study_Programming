@@ -9,15 +9,18 @@ private:
 	 string* m_WordList; //단어리스트
 	 int m_WordCount;//단어 갯수
 	 list<Word*> m_DropList;//현재 화면에서 드롭되는 단어 리스트
-	 int m_Speed;
+	 int m_Speed; //단어 드롭에 추가적으로 적용 되는 +스피드
+	 int m_ItemTime;
+	 bool m_ItemUse;
+	 bool m_Mosaic;
 public:
 	WordManager();
 	~WordManager();
 	void WordClear();
 	void WordCreat();
+	void ItemCheck();
 	bool DropWord();
 	bool WordCheck(string text);
-	void RandomItem();
 	int GetSpeed() { return m_Speed; }
 };
 
