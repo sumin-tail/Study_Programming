@@ -1,7 +1,0 @@
-tailbeast 270 3
-tail 250 3
-d 160 2
-e 80 1
-dasada 30 1
-asd 10 1
-f 0 1
