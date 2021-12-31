@@ -4,6 +4,7 @@
 #include "framework.h"
 #include "WinAPI.h"
 #include "string"
+#pragma comment(lib, "msimg32.lib")
 
 #define MAX_LOADSTRING 100
 
@@ -121,28 +122,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-    //case WM_LBUTTONDOWN:
-    //    if (MessageBox(hWnd, L"사각형 만들기", L"도형 만들기", MB_OK) == IDOK)
-    //    {
-    //        HDC hdc = GetDC(hWnd);
-    //        Rectangle(hdc, 10, 100, 100, 190);
-    //        ReleaseDC(hWnd, hdc);
-    //    }
-    //    break;
+    case WM_LBUTTONDOWN:
+        if (MessageBox(hWnd, L"사각형 만들기", L"도형 만들기", MB_OK) == IDOK)
+        {
+            HDC hdc = GetDC(hWnd);
+            Rectangle(hdc, 10, 100, 100, 190);
+            ReleaseDC(hWnd, hdc);
+        }
+        break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
-            HDC memDC = CreateCompatibleDC(hdc);
-            HBITMAP myBitmap = (HBITMAP)LoadImageA(NULL, "00.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-            auto OldBitmap = (HBITMAP)SelectObject(memDC, myBitmap);
-            BitBlt(hdc, 0, 0, 145, 245, memDC, 0, 0, SRCCOPY);
-            StretchBlt(hdc, 200, 200, 245, 345, memDC, 0, 0, 145, 245, SRCCOPY);
-            SelectObject(memDC, OldBitmap);
-            DeleteObject(myBitmap);
-            DeleteDC(memDC);
-            //
+
             EndPaint(hWnd, &ps);
         }
         break;
