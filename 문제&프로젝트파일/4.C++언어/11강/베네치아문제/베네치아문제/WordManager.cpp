@@ -41,7 +41,7 @@ void WordManager::WordCreat() //단어 생성
 	int num = rand() % m_WordCount;//단어 선택
 	int x = rand() % WIDTHFULL + 2;
 	bool item = false;
-	if (rand() % 100 < 50) //아이템 단어 생성 확률 10퍼센트
+	if (rand() % 100 < 10) //아이템 단어 생성 확률 10퍼센트
 	{
 		item = true;
 	}
