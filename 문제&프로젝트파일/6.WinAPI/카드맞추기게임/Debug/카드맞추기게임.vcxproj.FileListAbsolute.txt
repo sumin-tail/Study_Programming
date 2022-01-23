@@ -1,0 +1,2 @@
+D:\코딩\Study_Programming\문제&프로젝트파일\6.WinAPI\카드맞추기게임\Debug\카드맞추기게임.exe
+D:\코딩\Study_Programming\문제&프로젝트파일\6.WinAPI\카드맞추기게임\Debug\카드맞추기게임.pdb
